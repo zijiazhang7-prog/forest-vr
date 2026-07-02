@@ -15,6 +15,7 @@ public class MushroomSequencePuzzle : MonoBehaviour
     [SerializeField] private MagicCore magicCorePrefab;
     [SerializeField] private Transform coreSpawnPoint;
     [SerializeField] private NifflerStealSequence nifflerSteal;
+    [SerializeField] private NarrativeDirector narrativeDirector;
 
     [Header("Feedback Strings")]
     [SerializeField] private string[] complainLines = {
@@ -48,9 +49,9 @@ public class MushroomSequencePuzzle : MonoBehaviour
 
         if (mushroomId == correctSequence[currentIndex])
         {
-            // 正确
-            if (mushrooms != null && currentIndex < mushrooms.Length && mushrooms[currentIndex] != null)
-                mushrooms[currentIndex].PlayCorrectFeedback();
+            // 通过 mushroomId 找到对应蘑菇做反馈
+            var hitMushroom = System.Array.Find(mushrooms, m => m != null && m.MushroomId == mushroomId);
+            hitMushroom?.PlayCorrectFeedback();
 
             currentIndex++;
             Debug.Log($"[MushroomSequencePuzzle] Correct! Progress: {currentIndex}/{correctSequence.Length}");
@@ -91,7 +92,8 @@ public class MushroomSequencePuzzle : MonoBehaviour
             Instantiate(magicCorePrefab, coreSpawnPoint.position, coreSpawnPoint.rotation);
 
         // 字幕
-        FindFirstObjectByType<NarrativeDirector>()?.PlayMushroomComplete();
+        if (narrativeDirector != null)
+            narrativeDirector.PlayMushroomComplete();
 
         // 嗅嗅出场
         if (nifflerSteal != null)

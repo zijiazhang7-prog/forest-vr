@@ -26,7 +26,6 @@ public class AnimatorWalkAgent : MonoBehaviour
         }
 
         isWalking = true;
-        currentIndex = 0;
         transform.position = waypoints[0].position;
         currentIndex = 1;
     }

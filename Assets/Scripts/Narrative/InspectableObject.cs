@@ -1,3 +1,4 @@
+using ForestVR;
 using UnityEngine;
 
 /// <summary>
@@ -19,14 +20,14 @@ public class InspectableObject : MonoBehaviour
 
     private void OnEnable()
     {
-        if (BluetoothButton.Instance != null)
-            BluetoothButton.Instance.OnInteractPressed += OnInteractPressed;
+        if (BluetoothButtonInput.Instance != null)
+            BluetoothButtonInput.Instance.OnInteractPressed += OnInteractPressed;
     }
 
     private void OnDisable()
     {
-        if (BluetoothButton.Instance != null)
-            BluetoothButton.Instance.OnInteractPressed -= OnInteractPressed;
+        if (BluetoothButtonInput.Instance != null)
+            BluetoothButtonInput.Instance.OnInteractPressed -= OnInteractPressed;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -1,3 +1,4 @@
+using ForestVR;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,7 +51,7 @@ public class ChargeSnatchMinigame : MonoBehaviour
     {
         if (!isActive || !playerInRange) return;
 
-        var btn = BluetoothButton.Instance;
+        var btn = BluetoothButtonInput.Instance;
         if (btn != null && btn.IsHeld())
         {
             holdTimer += Time.deltaTime;

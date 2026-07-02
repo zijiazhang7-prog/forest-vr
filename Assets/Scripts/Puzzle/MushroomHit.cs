@@ -1,13 +1,13 @@
+using ForestVR;
 using UnityEngine;
 
 /// <summary>
 /// 单个蘑菇的碰撞检测。触发 OnInteract 时通知 MushroomSequencePuzzle。
-/// B 已从 MushroomSequencePuzzle 中拆分此类为独立文件。
 /// </summary>
 [RequireComponent(typeof(Collider))]
 public class MushroomHit : MonoBehaviour
 {
-    [SerializeField] private int mushroomId; // 蘑菇编号，对应 correctSequence 中的值
+    [SerializeField] private int mushroomId;
 
     public int MushroomId => mushroomId;
 
@@ -20,14 +20,14 @@ public class MushroomHit : MonoBehaviour
 
     private void OnEnable()
     {
-        if (BluetoothButton.Instance != null)
-            BluetoothButton.Instance.OnInteractPressed += OnInteract;
+        if (BluetoothButtonInput.Instance != null)
+            BluetoothButtonInput.Instance.OnInteractPressed += OnInteract;
     }
 
     private void OnDisable()
     {
-        if (BluetoothButton.Instance != null)
-            BluetoothButton.Instance.OnInteractPressed -= OnInteract;
+        if (BluetoothButtonInput.Instance != null)
+            BluetoothButtonInput.Instance.OnInteractPressed -= OnInteract;
     }
 
     private void OnTriggerEnter(Collider other)

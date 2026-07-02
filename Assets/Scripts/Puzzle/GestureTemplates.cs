@@ -16,14 +16,18 @@ public class GestureTemplates : ScriptableObject
 /// </summary>
 public static class GestureTemplateData
 {
+    private static Vector2[] cachedStraight;
+    private static Vector2[] cachedWave;
+    private static Vector2[] cachedZigzag;
+
     public static Vector2[] GetTemplate(GestureKind kind)
     {
         return kind switch
         {
-            GestureKind.StraightLine => GenerateStraightLine(32),
-            GestureKind.WaveLine => GenerateWaveLine(32),
-            GestureKind.ZigzagLine => GenerateZigzagLine(32),
-            _ => GenerateStraightLine(32),
+            GestureKind.StraightLine => cachedStraight ??= GenerateStraightLine(32),
+            GestureKind.WaveLine => cachedWave ??= GenerateWaveLine(32),
+            GestureKind.ZigzagLine => cachedZigzag ??= GenerateZigzagLine(32),
+            _ => cachedStraight ??= GenerateStraightLine(32),
         };
     }
 

@@ -62,6 +62,7 @@ public static class ForestVRSceneSetup
         SimplePlayerLocomotion locomotion = GetOrAdd<SimplePlayerLocomotion>(rig);
         locomotion.ViewTransform = cameraTransform;
         GetOrAdd<BluetoothButtonInput>(rig);
+        GetOrAdd<PlayerRigSetup>(rig);
         GetOrAdd<PlayerCollisionLayerSetup>(rig);
 
         DisableOtherCameras(camera);

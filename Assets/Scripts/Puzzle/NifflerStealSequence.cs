@@ -7,8 +7,9 @@ using UnityEngine;
 public class NifflerStealSequence : MonoBehaviour
 {
     [SerializeField] private GameObject nifflerObject;
-    [SerializeField] private Transform stealTarget; // 核心生成位置
+    [SerializeField] private Transform stealTarget;
     [SerializeField] private NifflerEscapeSequence escapeSequence;
+    [SerializeField] private NarrativeDirector narrativeDirector;
 
     private void Start()
     {
@@ -23,15 +24,26 @@ public class NifflerStealSequence : MonoBehaviour
 
     private IEnumerator StealRoutine()
     {
+        const float safetyTimeout = 30f;
+
         // 等蘑菇完成字幕结束
-        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying)
+        var waited = 0f;
+        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying && waited < safetyTimeout)
+        {
+            waited += Time.deltaTime;
             yield return null;
+        }
 
         // 播放嗅嗅出场字幕
-        FindFirstObjectByType<NarrativeDirector>()?.PlayNifflerIntro();
+        if (narrativeDirector != null)
+            narrativeDirector.PlayNifflerIntro();
 
-        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying)
+        waited = 0f;
+        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying && waited < safetyTimeout)
+        {
+            waited += Time.deltaTime;
             yield return null;
+        }
 
         // 嗅嗅冲出
         if (nifflerObject != null)

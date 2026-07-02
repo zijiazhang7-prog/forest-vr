@@ -1,3 +1,4 @@
+using ForestVR;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ using UnityEngine;
 public class MagicPedestal : MonoBehaviour
 {
     [SerializeField] private GameObject glowEffect;
-    [SerializeField] private bool isEndingPedestal; // 终章底座 vs 河岸底座
+    [SerializeField] private bool isEndingPedestal;
 
     private bool activated;
     private bool playerInRange;
@@ -21,14 +22,14 @@ public class MagicPedestal : MonoBehaviour
 
     private void OnEnable()
     {
-        if (BluetoothButton.Instance != null)
-            BluetoothButton.Instance.OnInteractPressed += OnInteract;
+        if (BluetoothButtonInput.Instance != null)
+            BluetoothButtonInput.Instance.OnInteractPressed += OnInteract;
     }
 
     private void OnDisable()
     {
-        if (BluetoothButton.Instance != null)
-            BluetoothButton.Instance.OnInteractPressed -= OnInteract;
+        if (BluetoothButtonInput.Instance != null)
+            BluetoothButtonInput.Instance.OnInteractPressed -= OnInteract;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -84,10 +85,15 @@ public class MagicPedestal : MonoBehaviour
 
     private System.Collections.IEnumerator DelayedBridgeOpen()
     {
-        // 等字幕播完
-        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying)
+        const float safetyTimeout = 30f;
+        var waited = 0f;
+        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying && waited < safetyTimeout)
+        {
+            waited += Time.deltaTime;
             yield return null;
+        }
         yield return new WaitForSeconds(0.5f);
-        GameProgressManager.Instance.AdvanceStage(GameStage.BridgeOpen);
+        if (this != null)
+            GameProgressManager.Instance?.AdvanceStage(GameStage.BridgeOpen);
     }
 }

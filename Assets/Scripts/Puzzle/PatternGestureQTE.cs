@@ -27,6 +27,8 @@ public class PatternGestureQTE : MonoBehaviour
     private List<Vector2> currentInput;
     private bool isRecording;
     private float recordTimer;
+    private float releaseTimer;
+    private const float ReleaseBuffer = 0.3f;
 
     private void Start()
     {
@@ -53,6 +55,7 @@ public class PatternGestureQTE : MonoBehaviour
         currentInput = new List<Vector2>();
         isRecording = true;
         recordTimer = 0;
+        releaseTimer = 0;
 
         if (roundText != null)
             roundText.text = $"第 {currentRound + 1} / {rounds.Length} 次画符";
@@ -77,11 +80,19 @@ public class PatternGestureQTE : MonoBehaviour
             recordTimer = 0;
         }
 
-        // 松开摇杆一段时间后判定
+        // 松手缓冲：持续 0.3s 无输入后才判定
         if (input.magnitude < 0.05f && currentInput.Count > 8)
         {
-            isRecording = false;
-            EvaluateRound();
+            releaseTimer += Time.deltaTime;
+            if (releaseTimer >= ReleaseBuffer)
+            {
+                isRecording = false;
+                EvaluateRound();
+            }
+        }
+        else if (input.magnitude >= 0.05f)
+        {
+            releaseTimer = 0;
         }
 
         // Editor 测试：Space 键提交

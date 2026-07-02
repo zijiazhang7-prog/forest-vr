@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ForestVR;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,7 +81,7 @@ public class SubtitleCutscene : MonoBehaviour
             while (elapsed < holdDuration)
             {
                 if (Input.GetKeyDown(KeyCode.Space) ||
-                    (BluetoothButton.Instance != null && BluetoothButton.Instance.IsPressedThisFrame()))
+                    (BluetoothButtonInput.Instance != null && BluetoothButtonInput.Instance.IsPressedThisFrame()))
                 {
                     break;
                 }

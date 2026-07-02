@@ -22,7 +22,7 @@ public static class GestureMatcher
 
         // 计算累积点对点距离
         var totalDistance = 0f;
-        for (var i = 0; i < resampleCount && i < template.Length; i++)
+        for (var i = 0; i < resampleCount && i < template.Length && i < normalized.Length; i++)
         {
             totalDistance += Vector2.Distance(normalized[i], template[i]);
         }

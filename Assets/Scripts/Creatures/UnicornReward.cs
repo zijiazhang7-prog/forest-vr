@@ -6,7 +6,8 @@ using UnityEngine;
 public class UnicornReward : MonoBehaviour
 {
     [SerializeField] private MagicCore magicCorePrefab;
-    [SerializeField] private Transform[] spawnPoints; // 两个生成位置
+    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private NarrativeDirector narrativeDirector;
 
     public void GrantReward()
     {
@@ -26,16 +27,23 @@ public class UnicornReward : MonoBehaviour
         }
 
         // 字幕
-        FindFirstObjectByType<NarrativeDirector>()?.PlayUnicornComplete();
+        if (narrativeDirector != null)
+            narrativeDirector.PlayUnicornComplete();
 
         StartCoroutine(DelayedStageAdvance());
     }
 
     private System.Collections.IEnumerator DelayedStageAdvance()
     {
-        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying)
+        const float safetyTimeout = 30f;
+        var waited = 0f;
+        while (SubtitleCutscene.Instance != null && SubtitleCutscene.Instance.IsPlaying && waited < safetyTimeout)
+        {
+            waited += Time.deltaTime;
             yield return null;
+        }
         yield return new WaitForSeconds(1f);
-        GameProgressManager.Instance?.AdvanceStage(GameStage.HasThreeCores);
+        if (this != null)
+            GameProgressManager.Instance?.AdvanceStage(GameStage.HasThreeCores);
     }
 }
